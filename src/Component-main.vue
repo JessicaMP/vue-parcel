@@ -1,7 +1,7 @@
 <template>
 	<div>
 		<nav>
-			<input type="checkbox" v-model="checked"/>
+			<input type="checkbox" v-model="test"/>
 			<input v-model="val" :placeholder="text"/>
 			<button @click="saveText(val)"><i class="fas fa-plus"></i></button>
 		</nav>
@@ -47,7 +47,7 @@ export default {
       }
 		},
 		
-		checked() {
+		test() {
 			console.log('check');
 			
 		},
