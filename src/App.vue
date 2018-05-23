@@ -1,15 +1,18 @@
 <template>
   <div>
-    <h1>{{ data }}</h1>
+    <ComponentHeader/>
+    <ComponentMain/>
   </div>
 </template>
 
 <script>
+import ComponentHeader from './Component-header.vue';
+import ComponentMain from './Component-main.vue';
+
 export default {
-  data () {
-    return {
-      data: 'To do list'
-    }
+  components: {
+    ComponentHeader,
+    ComponentMain
   }
-}
+};
 </script>
