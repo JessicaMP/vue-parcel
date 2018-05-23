@@ -2,12 +2,12 @@
 	<div>
 		<nav>
 			<input type="checkbox" v-model="test"/>
-			<input v-model="val" :placeholder="text"/>
-			<button @click="saveText(val)"><i class="fas fa-plus"></i></button>
+			<input v-model.trim="val" :placeholder="text" @keyup.enter="saveText"/>
+			<button @click="saveText"><i class="fas fa-plus"></i></button>
 		</nav>
 		<div class="container">
 			<ol>
-				<li v-for="li in list" :key="li">
+				<li v-for="(li, index) in list" :key="index">
 					<input type="checkbox" name="" id="">
 					<span>{{ li }}</span>
 					<div class="box-buttons">
@@ -30,10 +30,10 @@ export default {
     };
   },
   methods: {
-    saveText(li) {
+    saveText() {
 				if (this.val.length > 0) {
+					this.list.push(this.val);
 					this.val = "";
-					this.list.push(li);
 					console.log("ok");
 				}
     },
@@ -83,7 +83,7 @@ ol {
 }
 
 .box-buttons {
-	display: inline-block;
+	// display: inline-block;
 	float: right;
 }
 
