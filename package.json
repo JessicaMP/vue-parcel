@@ -5,13 +5,17 @@
   "main": "index.js",
   "scripts": {
     "dev": "parcel index.html",
-    "prod": "parcel build index.html"
+    "prod": "parcel build index.html",
+    "deploy": "node ./node_modules/vue-gh-pages/index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/JessicaMP/vue-parcel.git"
   },
   "keywords": [],
-  "author": "Jessica Manturano",
+  "author": "Jessica Manturano <jessica95.mp@gmail.com>",
   "license": "ISC",
   "dependencies": {
-    "@fortawesome/fontawesome": "^1.1.8",
     "vue": "^2.5.16"
   },
   "devDependencies": {

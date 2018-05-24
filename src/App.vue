@@ -6,8 +6,8 @@
 </template>
 
 <script>
-import ComponentHeader from "./Component-header.vue";
-import ComponentMain from "./Component-main.vue";
+import ComponentHeader from "./components/Component-header";
+import ComponentMain from "./components/Component-main";
 
 export default {
   components: {
