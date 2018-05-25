@@ -10,18 +10,18 @@
 				<li v-for="(li, index) in filteredTodos" :key="index" class="todo" >
           <div class="view">
             <input type="checkbox" v-model="li.completed" class="toggle">
-            <span class="notView editing" @dblclick="editTodo(li)" :class="{completed: li.completed, editing: li === editing}">{{ li.name }}</span>
+            <input type="text" class="edit" v-if='li === editing' v-model="li.name" @keyup.enter="doneEdit(li)" @blur="doneEdit(li)">
+            <label for="checkbox" class="notView editing" @dblclick="editTodo(li)" :class="{completed: li.completed}">{{ li.name }}</label>
             <div class="box-buttons">
               <button @click="remove(index)"><i class="fas fa-times"></i></button>
             </div>
           </div>
-          <input type="text" class="edit" v-model="li.name" @keyup.enter="doneEdit">
 				</li>
 			</ol>
 		</main>
-    <footer class="footer container" v-show="hasTodo">
+    <footer class="footer container">
       <div class="row">
-        <span class="todo.count"><strong>{{ remainning }}</strong>Item</span>
+        <span v-if="incomplete"><strong>{{ incomplete }}</strong>Item</span>
         <ul class="filters">
           <li><a :class="{selected: filter === 'all'}" @click.prevent="filter = 'all'" href="t">Todos</a></li>
           <li><a :class="{selected: filter === 'todo'}" @click.prevent="filter = 'todo'" href="a">Activo</a></li>
@@ -36,6 +36,9 @@
 export default {
   data() {
     return {
+      props: {
+        list: {default: []}
+      },
       val: "",
       text: "Writing....",
       list: [
@@ -45,7 +48,7 @@ export default {
       ],
       filter: 'all',
       selectAll: false,
-      editing: null
+      editing: {}
     };
   },
   methods: {
@@ -69,13 +72,19 @@ export default {
     editTodo(li) {
       this.editing = li
     },
-    doneEdit() {
-      this.editing = null
+    doneEdit(li) {
+      this.editing = {};
+      if (li.name.trim() === '') {
+        this.remove(li)
+      }
+    },
+    inProgress(li) {
+      return ! li.completed;
     }
   },
   computed: {
-    remaininig() {
-      return this.list.filter(li => !li.completed).length
+    incomplete() {
+      return this.list.filter(this.inProgress).length;
     },
     filteredTodos() {
       if (this.filter === 'todo') {
@@ -84,9 +93,6 @@ export default {
         return this.list.filter(li => li.completed)
       }
       return this.list
-    },
-    hasTodo() {
-      return this.list.length > 0
     }
   },
   watch: {
@@ -96,7 +102,7 @@ export default {
         return this.list.filter(li => li.completed = true)
         } else {
         return this.list.filter(li => li.completed = false)
-        return this.remaininig === 0
+        return this.incomplete === 0
         }
       }
     }
@@ -137,40 +143,28 @@ ol {
     padding: 0.5rem;
   }
 
-  span {
-    display: inline-block;
-    text-align: left;
+  label {
+    padding-right: 10px;
+    width: 70%;
+    font-size: 18px;
+    line-height: 24px;
+    color: black;
+    z-index: 2;
+    overflow: hidden;
   }
 }
 
+.list li.done label {
+	color: #d9d9d9;
+	text-decoration: line-through;
+}
+
 .edit {
-    margin: 0;
-    width: 80%;
-    font-family: inherit;
-    font-weight: inherit;
-    border: 0;
-    border: 1px solid #999;
-    box-shadow: inset 0 -1px 5px 0 rgba(0, 0, 0, 0.2);
-    box-sizing: border-box;
-    -webkit-font-smoothing: antialiased;
-    -moz-font-smoothing: antialiased;
-    display: none;
-}
-
-.todo-list li.editing {
-	border-bottom: none;
-	padding: 0;
-}
-
-.todo-list li.editing .edit {
-	display: block;
-	width: 506px;
-	padding: 13px 17px 12px 17px;
-	margin: 0 0 0 43px;
-}
-
-.todo-list li.editing .view {
-	display: none;
+  border: 1px solid #dedede;
+	padding-left: 10px;
+	width: 70%;
+	height: 35px;
+	color: #555;
 }
 
 .completed {
@@ -192,10 +186,12 @@ ol {
     list-style: none;
     text-align: left;
     margin: 0;
+    padding: 0;
+    box-sizing: border-box;
 
     li {
       display: inline-block;
-      padding: 0 1rem;
+      padding: 0 0.8rem;
 
       a {
         color: black;
@@ -209,5 +205,25 @@ ol {
 .filters li a.selected, .filters li a:hover {
   border: 2px solid rgb(65, 184, 131);
   border-radius: 0.5rem;
+}
+
+@media only screen and(max-width: 500px) {
+  .row {
+    width: 80%;
+  }
+
+  .edit {
+    width: 50%;
+  }
+  
+  .footer {
+    font-size: 0.8rem;
+
+    .filters {
+      li {
+        padding: 0 5px;
+      }
+    } 
+  }
 }
 </style>
